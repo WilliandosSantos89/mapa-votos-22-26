@@ -140,7 +140,7 @@ function RootComponent() {
             <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur sm:gap-3 sm:px-4">
               <SidebarTrigger />
               <div className="min-w-0 truncate font-display text-[10px] font-semibold uppercase tracking-[0.15em] sm:text-sm sm:tracking-[0.2em]">
-                ELEIÇÕES 2022&nbsp;· FORTALEZA · MARACANAÚ
+                ELEIÇÕES 2022 · 2026&nbsp;· FORTALEZA · MARACANAÚ
               </div>
             </header>
             <main className="flex-1 min-w-0">
