@@ -8,4 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
-- Votes table holds multiple election years in column `ano`; existing dashboard queries filter ano=2022 and the Sheets sync only replaces 2022 rows, so imported years are never wiped.
+- Votes table holds multiple election years in column `ano`; the main dashboard (/) compares both years via getVotosComparativo, while the full-candidate 2022 analysis (/analise-2022) and candidate pages filter ano=2022 and the Sheets sync only replaces 2022 rows, so imported years are never wiped.

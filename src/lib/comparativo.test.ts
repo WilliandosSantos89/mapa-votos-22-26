@@ -30,3 +30,16 @@ describe("compararSecoes", () => {
     expect(r[0].ef2026).toBe(6);
   });
 });
+
+import { gerarInsights as _gi, compararSecoes as _cs } from "./comparativo";
+describe("gerarInsights", () => {
+  it("reporta queda geral e seção zerada", () => {
+    const rows = [
+      { ano: 2022, zona: "117", secao: "1", candidato: "DAVID DURAND", votos: 10, aptos: 100, local_votacao: "A", bairro: "X" },
+      { ano: 2026, zona: "117", secao: "1", candidato: "DAVID DURAND", votos: 0, aptos: 100, local_votacao: "A", bairro: "X" },
+    ];
+    const ins = _gi(_cs(rows, ["DAVID DURAND"]));
+    expect(ins[0].titulo).toBe("Queda geral");
+    expect(ins.some((i) => i.titulo === "1 seções zeraram em 2026")).toBe(true);
+  });
+});
