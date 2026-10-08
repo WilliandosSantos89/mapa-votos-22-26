@@ -39,6 +39,7 @@ import {
 import { TrendingUp, MapPin, Target, AlertTriangle, Trophy, Upload, Users } from "lucide-react";
 
 export const Route = createFileRoute("/analise-2022")({
+  head: () => ({ meta: [{ title: "Análise completa 2022 — Mapa de Votos" }, { name: "description", content: "Análise detalhada da eleição de 2022 com todos os candidatos." }, { property: "og:title", content: "Análise completa 2022 — Mapa de Votos" }, { property: "og:description", content: "Desempenho, comparecimento e locais críticos em 2022." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   component: Dashboard,
 });
 
