@@ -1,0 +1,3 @@
+- [ ] Adaptar navegação e controles para toque.
+- [ ] Reorganizar filtros, indicadores, gráficos e comparações para celulares.
+- [ ] Verificar páginas em celulares e computadores.
