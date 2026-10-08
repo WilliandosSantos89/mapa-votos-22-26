@@ -38,7 +38,7 @@ import {
 } from "@/lib/candidatos";
 import { TrendingUp, MapPin, Target, AlertTriangle, Trophy, Upload, Users } from "lucide-react";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/analise-2022")({
   component: Dashboard,
 });
 
