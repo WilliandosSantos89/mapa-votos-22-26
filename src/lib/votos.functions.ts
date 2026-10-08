@@ -13,6 +13,7 @@ export type VotoRow = {
 };
 
 const COLS = "municipio,zona,secao,cargo,candidato,votos,aptos,local_votacao";
+const COLS_ANO = "municipio,zona,secao,cargo,candidato,votos,aptos,local_votacao,ano,bairro";
 
 export const getVotos = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -22,6 +23,7 @@ export const getVotos = createServerFn({ method: "GET" }).handler(async () => {
     const { data, error } = await supabaseAdmin
       .from("votos")
       .select(COLS)
+      .eq("ano", 2022)
       .order("id", { ascending: true })
       .range(from, from + CHUNK - 1);
     if (error) throw new Error(error.message);
@@ -42,6 +44,7 @@ export const getVotosCandidato = createServerFn({ method: "GET" })
       const { data: rowsData, error } = await supabaseAdmin
         .from("votos")
         .select(COLS)
+      .eq("ano", 2022)
         .eq("candidato", data.nome)
         .order("id", { ascending: true })
         .range(from, from + CHUNK - 1);
@@ -69,4 +72,24 @@ export const getSyncStatus = createServerFn({ method: "GET" }).handler(async () 
     .maybeSingle();
   if (error) throw new Error(error.message);
   return data as { last_sync_at: string | null; total_rows: number | null } | null;
+});
+
+export type VotoAnoRow = VotoRow & { ano: number; bairro: string | null };
+
+export const getVotosComparativo = createServerFn({ method: "GET" }).handler(async () => {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const CHUNK = 1000;
+  const all: VotoAnoRow[] = [];
+  for (let from = 0; ; from += CHUNK) {
+    const { data, error } = await supabaseAdmin
+      .from("votos")
+      .select(COLS_ANO)
+      .order("id", { ascending: true })
+      .range(from, from + CHUNK - 1);
+    if (error) throw new Error(error.message);
+    const rows = (data ?? []) as VotoAnoRow[];
+    all.push(...rows);
+    if (rows.length < CHUNK) break;
+  }
+  return all;
 });

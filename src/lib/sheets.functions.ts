@@ -76,7 +76,7 @@ export const syncFromSheets = createServerFn({ method: "POST" })
     }
 
     if (data.reset) {
-      const { error: delErr } = await supabaseAdmin.from("votos").delete().neq("id", -1);
+      const { error: delErr } = await supabaseAdmin.from("votos").delete().eq("ano", 2022);
       if (delErr) throw new Error(`Erro ao limpar: ${delErr.message}`);
     }
 

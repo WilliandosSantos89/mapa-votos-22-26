@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SincronizarRouteImport } from './routes/sincronizar'
 import { Route as RonaldoMartinsRouteImport } from './routes/ronaldo-martins'
 import { Route as DavidDurandRouteImport } from './routes/david-durand'
+import { Route as ComparativoRouteImport } from './routes/comparativo'
 import { Route as IndexRouteImport } from './routes/index'
 
 const SincronizarRoute = SincronizarRouteImport.update({
@@ -29,6 +30,11 @@ const DavidDurandRoute = DavidDurandRouteImport.update({
   path: '/david-durand',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComparativoRoute = ComparativoRouteImport.update({
+  id: '/comparativo',
+  path: '/comparativo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comparativo': typeof ComparativoRoute
   '/david-durand': typeof DavidDurandRoute
   '/ronaldo-martins': typeof RonaldoMartinsRoute
   '/sincronizar': typeof SincronizarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comparativo': typeof ComparativoRoute
   '/david-durand': typeof DavidDurandRoute
   '/ronaldo-martins': typeof RonaldoMartinsRoute
   '/sincronizar': typeof SincronizarRoute
@@ -50,20 +58,38 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/comparativo': typeof ComparativoRoute
   '/david-durand': typeof DavidDurandRoute
   '/ronaldo-martins': typeof RonaldoMartinsRoute
   '/sincronizar': typeof SincronizarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/david-durand' | '/ronaldo-martins' | '/sincronizar'
+  fullPaths:
+    | '/'
+    | '/comparativo'
+    | '/david-durand'
+    | '/ronaldo-martins'
+    | '/sincronizar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/david-durand' | '/ronaldo-martins' | '/sincronizar'
-  id: '__root__' | '/' | '/david-durand' | '/ronaldo-martins' | '/sincronizar'
+  to:
+    | '/'
+    | '/comparativo'
+    | '/david-durand'
+    | '/ronaldo-martins'
+    | '/sincronizar'
+  id:
+    | '__root__'
+    | '/'
+    | '/comparativo'
+    | '/david-durand'
+    | '/ronaldo-martins'
+    | '/sincronizar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComparativoRoute: typeof ComparativoRoute
   DavidDurandRoute: typeof DavidDurandRoute
   RonaldoMartinsRoute: typeof RonaldoMartinsRoute
   SincronizarRoute: typeof SincronizarRoute
@@ -92,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DavidDurandRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/comparativo': {
+      id: '/comparativo'
+      path: '/comparativo'
+      fullPath: '/comparativo'
+      preLoaderRoute: typeof ComparativoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComparativoRoute: ComparativoRoute,
   DavidDurandRoute: DavidDurandRoute,
   RonaldoMartinsRoute: RonaldoMartinsRoute,
   SincronizarRoute: SincronizarRoute,
