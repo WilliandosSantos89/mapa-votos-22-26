@@ -9,25 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ComparativoRouteImport } from './routes/comparativo'
-import { Route as DavidDurandRouteImport } from './routes/david-durand'
-import { Route as RonaldoMartinsRouteImport } from './routes/ronaldo-martins'
 import { Route as SincronizarRouteImport } from './routes/sincronizar'
+import { Route as RonaldoMartinsRouteImport } from './routes/ronaldo-martins'
+import { Route as DavidDurandRouteImport } from './routes/david-durand'
+import { Route as ComparativoRouteImport } from './routes/comparativo'
+import { Route as IndexRouteImport } from './routes/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ComparativoRoute = ComparativoRouteImport.update({
-  id: '/comparativo',
-  path: '/comparativo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DavidDurandRoute = DavidDurandRouteImport.update({
-  id: '/david-durand',
-  path: '/david-durand',
+const SincronizarRoute = SincronizarRouteImport.update({
+  id: '/sincronizar',
+  path: '/sincronizar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RonaldoMartinsRoute = RonaldoMartinsRouteImport.update({
@@ -35,9 +25,19 @@ const RonaldoMartinsRoute = RonaldoMartinsRouteImport.update({
   path: '/ronaldo-martins',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SincronizarRoute = SincronizarRouteImport.update({
-  id: '/sincronizar',
-  path: '/sincronizar',
+const DavidDurandRoute = DavidDurandRouteImport.update({
+  id: '/david-durand',
+  path: '/david-durand',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparativoRoute = ComparativoRouteImport.update({
+  id: '/comparativo',
+  path: '/comparativo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -66,10 +66,18 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/comparativo' | '/david-durand' | '/ronaldo-martins' | '/sincronizar'
+    | '/'
+    | '/comparativo'
+    | '/david-durand'
+    | '/ronaldo-martins'
+    | '/sincronizar'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/comparativo' | '/david-durand' | '/ronaldo-martins' | '/sincronizar'
+    | '/'
+    | '/comparativo'
+    | '/david-durand'
+    | '/ronaldo-martins'
+    | '/sincronizar'
   id:
     | '__root__'
     | '/'
@@ -89,25 +97,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/comparativo': {
-      id: '/comparativo'
-      path: '/comparativo'
-      fullPath: '/comparativo'
-      preLoaderRoute: typeof ComparativoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/david-durand': {
-      id: '/david-durand'
-      path: '/david-durand'
-      fullPath: '/david-durand'
-      preLoaderRoute: typeof DavidDurandRouteImport
+    '/sincronizar': {
+      id: '/sincronizar'
+      path: '/sincronizar'
+      fullPath: '/sincronizar'
+      preLoaderRoute: typeof SincronizarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ronaldo-martins': {
@@ -117,11 +111,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RonaldoMartinsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sincronizar': {
-      id: '/sincronizar'
-      path: '/sincronizar'
-      fullPath: '/sincronizar'
-      preLoaderRoute: typeof SincronizarRouteImport
+    '/david-durand': {
+      id: '/david-durand'
+      path: '/david-durand'
+      fullPath: '/david-durand'
+      preLoaderRoute: typeof DavidDurandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparativo': {
+      id: '/comparativo'
+      path: '/comparativo'
+      fullPath: '/comparativo'
+      preLoaderRoute: typeof ComparativoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
