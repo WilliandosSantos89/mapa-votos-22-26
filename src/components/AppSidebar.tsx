@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { BarChart3, GitCompare, UserRound } from "lucide-react";
+import { BarChart3, GitCompare, UserRound, History } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/sidebar";
 
 const items = [
-  { title: "Dashboard", url: "/", icon: BarChart3 },
-  { title: "2022 x 2026", url: "/comparativo", icon: GitCompare },
+  { title: "Visão geral 2022 x 2026", url: "/", icon: BarChart3 },
+  { title: "Detalhe por seção", url: "/comparativo", icon: GitCompare },
+  { title: "Análise completa 2022", url: "/analise-2022", icon: History },
   { title: "Ronaldo Martins", url: "/ronaldo-martins", icon: UserRound },
   { title: "David Durand", url: "/david-durand", icon: UserRound },
 ] as const;

@@ -13,7 +13,7 @@ import { Route as SincronizarRouteImport } from './routes/sincronizar'
 import { Route as RonaldoMartinsRouteImport } from './routes/ronaldo-martins'
 import { Route as DavidDurandRouteImport } from './routes/david-durand'
 import { Route as ComparativoRouteImport } from './routes/comparativo'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as Analise2022RouteImport } from './routes/analise-2022'
 
 const SincronizarRoute = SincronizarRouteImport.update({
   id: '/sincronizar',
@@ -35,21 +35,21 @@ const ComparativoRoute = ComparativoRouteImport.update({
   path: '/comparativo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const Analise2022Route = Analise2022RouteImport.update({
+  id: '/analise-2022',
+  path: '/analise-2022',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/analise-2022': typeof Analise2022Route
   '/comparativo': typeof ComparativoRoute
   '/david-durand': typeof DavidDurandRoute
   '/ronaldo-martins': typeof RonaldoMartinsRoute
   '/sincronizar': typeof SincronizarRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/analise-2022': typeof Analise2022Route
   '/comparativo': typeof ComparativoRoute
   '/david-durand': typeof DavidDurandRoute
   '/ronaldo-martins': typeof RonaldoMartinsRoute
@@ -57,7 +57,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/analise-2022': typeof Analise2022Route
   '/comparativo': typeof ComparativoRoute
   '/david-durand': typeof DavidDurandRoute
   '/ronaldo-martins': typeof RonaldoMartinsRoute
@@ -66,21 +66,21 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
+    | '/analise-2022'
     | '/comparativo'
     | '/david-durand'
     | '/ronaldo-martins'
     | '/sincronizar'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/analise-2022'
     | '/comparativo'
     | '/david-durand'
     | '/ronaldo-martins'
     | '/sincronizar'
   id:
     | '__root__'
-    | '/'
+    | '/analise-2022'
     | '/comparativo'
     | '/david-durand'
     | '/ronaldo-martins'
@@ -88,7 +88,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  Analise2022Route: typeof Analise2022Route
   ComparativoRoute: typeof ComparativoRoute
   DavidDurandRoute: typeof DavidDurandRoute
   RonaldoMartinsRoute: typeof RonaldoMartinsRoute
@@ -125,18 +125,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComparativoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/analise-2022': {
+      id: '/analise-2022'
+      path: '/analise-2022'
+      fullPath: '/analise-2022'
+      preLoaderRoute: typeof Analise2022RouteImport
       parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  Analise2022Route: Analise2022Route,
   ComparativoRoute: ComparativoRoute,
   DavidDurandRoute: DavidDurandRoute,
   RonaldoMartinsRoute: RonaldoMartinsRoute,

@@ -69,3 +69,42 @@ export function agrupar(secoes: SecaoComp[], campo: "bairro" | "local") {
   }
   return [...m.values()].map((g) => ({ ...g, diff: g.v2026 - g.v2022, diffPct: g.v2022 ? ((g.v2026 - g.v2022) / g.v2022) * 100 : null }));
 }
+
+export type Insight = { tipo: "positivo" | "negativo" | "alerta" | "info"; titulo: string; texto: string };
+
+/** Gera leituras automáticas a partir das seções comparadas (somente seções presentes nos dois anos entram na variação). */
+export function gerarInsights(secoes: SecaoComp[]): Insight[] {
+  const out: Insight[] = [];
+  const ambos = secoes.filter((s) => s.em2022 && s.em2026);
+  if (!ambos.length) return out;
+  const t22 = ambos.reduce((a, s) => a + s.v2022, 0);
+  const t26 = ambos.reduce((a, s) => a + s.v2026, 0);
+  const d = t26 - t22;
+  out.push({
+    tipo: d >= 0 ? "positivo" : "negativo",
+    titulo: d >= 0 ? "Crescimento geral" : "Queda geral",
+    texto: `Nas ${ambos.length} seções comparáveis, os votos foram de ${t22} para ${t26} (${d >= 0 ? "+" : ""}${d}${t22 ? `, ${((d / t22) * 100).toFixed(1)}%` : ""}).`,
+  });
+  const sub = ambos.filter((s) => s.diff > 0).length;
+  const cai = ambos.filter((s) => s.diff < 0).length;
+  out.push({ tipo: "info", titulo: "Seções em alta x em queda", texto: `${sub} seções cresceram, ${cai} caíram e ${ambos.length - sub - cai} ficaram iguais.` });
+  const bairros = agrupar(ambos, "bairro");
+  const melhor = [...bairros].sort((a, b) => b.diff - a.diff)[0];
+  const pior = [...bairros].sort((a, b) => a.diff - b.diff)[0];
+  if (melhor && melhor.diff > 0) out.push({ tipo: "positivo", titulo: `Bairro destaque: ${melhor.nome}`, texto: `Ganhou ${melhor.diff} votos (${melhor.v2022} → ${melhor.v2026}). Consolidar a base e replicar a estratégia.` });
+  if (pior && pior.diff < 0) out.push({ tipo: "negativo", titulo: `Bairro em queda: ${pior.nome}`, texto: `Perdeu ${-pior.diff} votos (${pior.v2022} → ${pior.v2026}). Investigar causa e reforçar presença.` });
+  const zeradas = ambos.filter((s) => s.v2022 > 0 && s.v2026 === 0);
+  if (zeradas.length) out.push({ tipo: "alerta", titulo: `${zeradas.length} seções zeraram em 2026`, texto: `Tinham votos em 2022 e nenhum em 2026 — prioridade de recuperação.` });
+  const novas = secoes.filter((s) => !s.em2022 && s.em2026 && s.v2026 > 0);
+  if (novas.length) out.push({ tipo: "info", titulo: `${novas.length} seções novas com votos`, texto: `Só existem em 2026 e somam ${novas.reduce((a, s) => a + s.v2026, 0)} votos.` });
+  return out;
+}
+
+/** Seções prioritárias: muitos eleitores aptos e baixa eficiência em 2026 (potencial a conquistar). */
+export function prioritarias(secoes: SecaoComp[], n = 10) {
+  return secoes
+    .filter((s) => s.em2026 && s.aptos2026 > 0)
+    .map((s) => ({ ...s, potencial: s.aptos2026 * (1 - s.ef2026 / 100) }))
+    .sort((a, b) => a.ef2026 - b.ef2026 || b.aptos2026 - a.aptos2026)
+    .slice(0, n);
+}
