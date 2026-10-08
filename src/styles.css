@@ -44,8 +44,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sans);
 }
 
 :root {
@@ -109,16 +109,21 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  button, input, select, textarea, table, svg text, [role="listbox"], [role="option"] {
+    font-family: var(--font-sans);
+    letter-spacing: 0;
+  }
+
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 }
 
 /* === Reference-inspired display + reveal utilities === */
 .font-display-xl {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   line-height: 1;
   font-weight: 500;
 }
@@ -285,5 +290,17 @@
 
 /* Chart entry animation refinement */
 .recharts-tooltip-wrapper { outline: none; }
+
+.mobile-navigation { padding-bottom: env(safe-area-inset-bottom, 0px); }
+@media (max-width: 767px) {
+  .mobile-main { padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px)); }
+  .mobile-main h1 { overflow-wrap: anywhere; }
+  .mobile-main [data-slot="button"] { min-height: 44px; }
+  .mobile-main input { font-size: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .animate-on-scroll, .stagger-reveal > * { opacity: 1; }
+}
 
 

@@ -15,6 +15,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { FloatingSyncButton } from "@/components/FloatingSyncButton";
+import { MobileNavigation } from "@/components/MobileNavigation";
 
 function NotFoundComponent() {
   return (
@@ -81,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -138,17 +139,21 @@ function RootComponent() {
           <AppSidebar />
           <div className="flex min-w-0 flex-1 flex-col">
             <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border/60 bg-background/80 px-3 backdrop-blur sm:gap-3 sm:px-4">
-              <SidebarTrigger />
-              <div className="min-w-0 truncate font-display text-[10px] font-semibold uppercase tracking-[0.15em] sm:text-sm sm:tracking-[0.2em]">
+              <SidebarTrigger aria-label="Abrir menu" className="h-11 w-11 shrink-0" />
+              <div className="min-w-0 font-display text-xs font-semibold sm:text-sm">
+                <span className="block md:hidden">Mapa de Votos <span className="block text-[11px] font-normal text-muted-foreground">Eleições 2022 · 2026</span></span>
+                <span className="hidden md:inline">
                 ELEIÇÕES 2022 · 2026&nbsp;· FORTALEZA · MARACANAÚ
+                </span>
               </div>
             </header>
-            <main className="flex-1 min-w-0">
+            <main className="mobile-main flex-1 min-w-0">
               <Outlet />
             </main>
           </div>
         </div>
         <FloatingSyncButton />
+        <MobileNavigation />
         <Toaster richColors position="top-right" />
       </SidebarProvider>
     </QueryClientProvider>

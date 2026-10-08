@@ -13,6 +13,13 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Cloud, Check, AlertTriangle, RefreshCw } from "lucide-react";
 
 export const Route = createFileRoute("/sincronizar")({
+  head: () => ({ meta: [
+    { title: "Atualizar dados — Mapa de Votos" },
+    { name: "description", content: "Atualização manual dos votos de 2022 a partir da planilha, preservando os dados de 2026." },
+    { property: "og:title", content: "Atualizar dados — Mapa de Votos" },
+    { property: "og:description", content: "Sincronização manual da planilha eleitoral." },
+    { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+  ] }),
   component: SincronizarPage,
 });
 
@@ -78,7 +85,7 @@ function SincronizarPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 p-6">
+    <div className="mx-auto max-w-3xl space-y-6 p-4 sm:p-6">
       <div>
         <h1 className="text-2xl font-semibold">Sincronizar do Google Sheets</h1>
         <p className="text-sm text-muted-foreground">

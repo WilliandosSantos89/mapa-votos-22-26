@@ -9,3 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 - Votes table holds multiple election years in column `ano`; the main dashboard (/) compares both years via getVotosComparativo, while the full-candidate 2022 analysis (/analise-2022) and candidate pages filter ano=2022 and the Sheets sync only replaces 2022 rows, so imported years are never wiped.
+- Comparison pages share ComparisonFilters and the root mounts MobileNavigation; keep mobile-only navigation and disclosure states separate from desktop to preserve access without crowding small screens.

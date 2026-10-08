@@ -9,7 +9,7 @@ export function FloatingSyncButton() {
     <Link
       to="/sincronizar"
       aria-label="Atualizar dados"
-      className="fixed bottom-5 right-5 z-50 inline-flex items-center gap-2 rounded border border-border bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+      className="fixed bottom-5 right-5 z-50 hidden items-center gap-2 rounded border border-border bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 md:inline-flex"
     >
       <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
       <span className="hidden sm:inline">Atualizar dados</span>

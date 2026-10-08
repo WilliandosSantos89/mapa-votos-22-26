@@ -36,7 +36,7 @@ import {
   CANDIDATO_RONALDO,
   FOCUS_CANDIDATOS,
 } from "@/lib/candidatos";
-import { TrendingUp, MapPin, Target, AlertTriangle, Trophy, Upload, Users } from "lucide-react";
+import { TrendingUp, MapPin, Target, AlertTriangle, Trophy, Upload, Users, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/analise-2022")({
   head: () => ({ meta: [{ title: "Análise completa 2022 — Mapa de Votos" }, { name: "description", content: "Análise detalhada da eleição de 2022 com todos os candidatos." }, { property: "og:title", content: "Análise completa 2022 — Mapa de Votos" }, { property: "og:description", content: "Desempenho, comparecimento e locais críticos em 2022." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
@@ -62,6 +62,7 @@ const META_SHARE = 15;
 
 
 function Dashboard() {
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const isTouch = useIsTouch();
   const fetchVotos = useServerFn(getVotos);
   const votosQ = useQuery({
@@ -380,12 +381,13 @@ function Dashboard() {
       {/* Filtros */}
       <section className="animate-on-scroll border-b border-border px-4 py-6 sm:px-6 sm:py-8">
         <div className="mb-4 flex items-center gap-3">
+          <Button variant="outline" className="h-11 gap-2 md:hidden" aria-expanded={filtersOpen} aria-controls="analysis-filters" onClick={() => setFiltersOpen(!filtersOpen)}><SlidersHorizontal className="h-4 w-4" />Filtros<ChevronDown className={`h-4 w-4 ${filtersOpen ? "rotate-180" : ""}`} /></Button>
           <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:text-[11px] sm:tracking-[0.2em]">
             FILTROS
           </span>
           <span className="h-px flex-1 bg-border" />
         </div>
-        <Card>
+        <Card id="analysis-filters" className={filtersOpen ? "block" : "hidden md:block"}>
           <CardContent className="grid grid-cols-1 gap-3 py-4 sm:grid-cols-3 lg:grid-cols-5">
             <FiltroSelect
               label="Município"
@@ -1009,7 +1011,7 @@ function FiltroSelect({
     <div>
       <div className="mb-1 text-xs text-muted-foreground">{label}</div>
       <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger>
+        <SelectTrigger aria-label={label}>
           <SelectValue placeholder="Todos" />
         </SelectTrigger>
         <SelectContent>

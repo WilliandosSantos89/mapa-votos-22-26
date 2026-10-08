@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { ComparisonFilters } from "@/components/ComparisonFilters";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { TrendingUp, TrendingDown, AlertTriangle, Lightbulb, Target, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -39,7 +41,7 @@ function Filtro({ label, value, onChange, opcoes }: { label: string; value: stri
     <div className="space-y-1 min-w-0">
       <div className="text-xs text-muted-foreground">{label}</div>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+        <SelectTrigger aria-label={label} className="w-full"><SelectValue /></SelectTrigger>
         <SelectContent>{opcoes.map((o) => <SelectItem key={o.v} value={o.v}>{o.l}</SelectItem>)}</SelectContent>
       </Select>
     </div>
@@ -51,14 +53,14 @@ function Kpi({ titulo, v22, v26, sufixo = "", decimais = 0 }: { titulo: string; 
   const f = (n: number) => n.toLocaleString("pt-BR", { maximumFractionDigits: decimais, minimumFractionDigits: decimais });
   return (
     <Card>
-      <CardContent className="p-4 space-y-2">
+      <CardContent className="p-3 sm:p-4 space-y-2">
         <div className="text-xs uppercase tracking-wide text-muted-foreground">{titulo}</div>
-        <div className="flex items-baseline gap-3">
-          <span className="text-3xl font-semibold">{f(v26)}{sufixo}</span>
+        <div className="flex flex-col gap-1 xl:flex-row xl:items-baseline xl:gap-3">
+          <span className="text-2xl sm:text-3xl font-semibold tabular-nums">{f(v26)}{sufixo}<span className="ml-2 text-xs font-normal text-muted-foreground">2026</span></span>
           <span className="text-sm text-muted-foreground">2022: {f(v22)}{sufixo}</span>
         </div>
-        <div className={`flex items-center gap-1 text-sm font-medium ${d > 0 ? "text-primary" : d < 0 ? "text-destructive" : "text-muted-foreground"}`}>
-          {d >= 0 ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
+        <div className={`flex flex-wrap items-center gap-1 text-xs sm:text-sm font-medium ${d > 0 ? "text-primary" : d < 0 ? "text-destructive" : "text-muted-foreground"}`}>
+          {d >= 0 ? <TrendingUp className="h-4 w-4 shrink-0" /> : <TrendingDown className="h-4 w-4 shrink-0" />}
           {d > 0 ? "+" : ""}{f(d)}{sufixo} {v22 > 0 && !sufixo ? `(${((d / v22) * 100).toFixed(1)}%)` : ""}
         </div>
       </CardContent>
@@ -67,6 +69,7 @@ function Kpi({ titulo, v22, v26, sufixo = "", decimais = 0 }: { titulo: string; 
 }
 
 function VisaoGeral() {
+  const isMobile = useIsMobile();
   const fn = useServerFn(getVotosComparativo);
   const { data = [], isLoading } = useQuery({ queryKey: ["votos-comparativo"], queryFn: () => fn(), staleTime: 5 * 60_000 });
 
@@ -121,20 +124,19 @@ function VisaoGeral() {
     <div className="mx-auto max-w-7xl space-y-6 p-4 md:p-6">
       <header className="space-y-1">
         <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight">Visão geral · 2022 x 2026</h1>
-        <p className="text-muted-foreground">David Durand (Dep. Estadual) e Ronaldo Martins (Dep. Federal) — o que mudou e onde agir.</p>
+        <p className="text-sm text-muted-foreground">David Durand (Dep. Estadual) e Ronaldo Martins (Dep. Federal) — o que mudou e onde agir.</p>
       </header>
 
-      <Card>
-        <CardContent className="grid grid-cols-2 gap-3 p-4 md:grid-cols-5">
+      <ComparisonFilters activeCount={[zona, bairro, local].filter(v => v !== T).length + (escopo === "todas" ? 1 : 0)} primary={
           <Filtro label="Candidato" value={cand} onChange={setCand} opcoes={[{ v: "ambos", l: "Aliança (ambos)" }, { v: "david", l: "David Durand" }, { v: "ronaldo", l: "Ronaldo Martins" }]} />
+      }>
           <Filtro label="Zona" value={zona} onChange={(v) => { setZona(v); setBairro(T); setLocal(T); }} opcoes={opt(zonas, "Todas as zonas")} />
           <Filtro label="Bairro" value={bairro} onChange={(v) => { setBairro(v); setLocal(T); }} opcoes={opt(bairros, "Todos os bairros")} />
           <Filtro label="Local de votação" value={local} onChange={setLocal} opcoes={opt(locais, "Todos os locais")} />
           <Filtro label="Seções" value={escopo} onChange={setEscopo} opcoes={[{ v: "ambos", l: "Presentes nos 2 anos" }, { v: "todas", l: "Todas" }]} />
-        </CardContent>
-      </Card>
+      </ComparisonFilters>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Kpi titulo="Votos" v22={v22} v26={v26} />
         <Kpi titulo="Eficiência (votos / aptos)" v22={ef22} v26={ef26} sufixo="%" decimais={2} />
         <Kpi titulo="Seções com voto" v22={comVoto22} v26={comVoto26} />
@@ -147,12 +149,12 @@ function VisaoGeral() {
             <CardTitle>Votos por {grupoCampo === "bairro" ? "bairro" : "local de votação"}</CardTitle>
             <CardDescription>Os 12 maiores — cinza = 2022, destaque = 2026</CardDescription>
           </CardHeader>
-          <CardContent className="h-80">
+          <CardContent className={isMobile ? "h-[560px]" : "h-80"}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chart} margin={{ left: -10, bottom: 40 }}>
+              <BarChart data={chart} layout={isMobile ? "vertical" : "horizontal"} margin={isMobile ? { left: 0, right: 8 } : { left: -10, bottom: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-                <XAxis dataKey="nome" angle={-35} textAnchor="end" interval={0} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} />
-                <YAxis tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} />
+                <XAxis type={isMobile ? "number" : "category"} dataKey={isMobile ? undefined : "nome"} angle={isMobile ? 0 : -35} textAnchor={isMobile ? "middle" : "end"} interval={isMobile ? "preserveStartEnd" : 0} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} />
+                <YAxis type={isMobile ? "category" : "number"} dataKey={isMobile ? "nome" : undefined} width={isMobile ? 108 : 60} interval={0} tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} />
                 <Tooltip contentStyle={{ background: "var(--popover)", border: "1px solid var(--border)", color: "var(--popover-foreground)" }} />
                 <Legend verticalAlign="top" />
                 <Bar dataKey="2022" fill={C22} radius={[3, 3, 0, 0]} />
@@ -169,7 +171,7 @@ function VisaoGeral() {
             {insights.map((i) => { const I = iconeInsight[i.tipo]; return (
               <div key={i.titulo} className="flex gap-3 rounded-md border border-border p-3">
                 <I className={`mt-0.5 h-4 w-4 shrink-0 ${corInsight[i.tipo]}`} />
-                <div><div className="text-sm font-medium">{i.titulo}</div><div className="text-xs text-muted-foreground">{i.texto}</div></div>
+                <div className="min-w-0"><div className="text-sm font-medium">{i.titulo}</div><div className="text-sm leading-relaxed text-muted-foreground">{i.texto}</div></div>
               </div>
             ); })}
           </CardContent>
@@ -201,12 +203,15 @@ function VisaoGeral() {
         <Card>
           <CardHeader><CardTitle className="flex items-center gap-2"><Target className="h-5 w-5 text-primary" /> Seções prioritárias</CardTitle><CardDescription>Muitos eleitores e baixa eficiência em 2026 — maior potencial</CardDescription></CardHeader>
           <CardContent>
-            <Table>
+            <div className="divide-y divide-border md:hidden">
+              {prio.map(s => <div key={s.chave} className="py-3"><div className="text-sm font-medium">{s.zona}/{s.secao}</div><div className="mt-1 text-sm text-muted-foreground">{s.local}</div><div className="mt-2 grid grid-cols-3 gap-2 text-xs text-muted-foreground"><div>Aptos<strong className="block text-sm font-medium text-foreground">{fmt(s.aptos2026)}</strong></div><div>Votos 2026<strong className="block text-sm font-medium text-foreground">{fmt(s.v2026)}</strong></div><div>Eficiência<strong className="block text-sm font-medium text-foreground">{s.ef2026.toFixed(2)}%</strong></div></div></div>)}
+            </div>
+            <div className="hidden md:block"><Table>
               <TableHeader><TableRow><TableHead>Seção</TableHead><TableHead>Local</TableHead><TableHead className="text-right">Aptos</TableHead><TableHead className="text-right">Votos 26</TableHead><TableHead className="text-right">Efic.</TableHead></TableRow></TableHeader>
               <TableBody>{prio.map((s) => (
                 <TableRow key={s.chave}><TableCell>{s.zona}/{s.secao}</TableCell><TableCell className="max-w-[180px] truncate">{s.local}</TableCell><TableCell className="text-right">{fmt(s.aptos2026)}</TableCell><TableCell className="text-right">{fmt(s.v2026)}</TableCell><TableCell className="text-right">{s.ef2026.toFixed(2)}%</TableCell></TableRow>
               ))}</TableBody>
-            </Table>
+            </Table></div>
           </CardContent>
         </Card>
         <Card>
@@ -223,9 +228,9 @@ function VisaoGeral() {
         </Card>
       </div>
 
-      <div className="flex flex-wrap gap-3">
-        <Button asChild variant="outline"><Link to="/comparativo">Detalhe por seção <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
-        <Button asChild variant="outline"><Link to="/analise-2022">Análise completa de 2022 (todos os candidatos) <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
+      <div className="grid gap-3 sm:flex sm:flex-wrap">
+        <Button asChild variant="outline"><Link to="/comparativo">Detalhe por seção <ArrowRight className="ml-1 h-4 w-4 shrink-0" /></Link></Button>
+        <Button asChild variant="outline" className="h-auto min-h-11 whitespace-normal text-left"><Link to="/analise-2022"><span className="min-w-0">Análise completa de 2022 (todos os candidatos)</span> <ArrowRight className="ml-1 h-4 w-4 shrink-0" /></Link></Button>
       </div>
     </div>
   );
