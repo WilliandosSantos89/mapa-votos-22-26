@@ -82,7 +82,7 @@ function SincronizarPage() {
       <div>
         <h1 className="text-2xl font-semibold">Sincronizar do Google Sheets</h1>
         <p className="text-sm text-muted-foreground">
-          Puxa os dados diretamente da planilha oficial (apenas linhas da Zona 117).
+          Puxa os dados diretamente da planilha oficial de votos (Fortaleza e Maracanaú).
         </p>
       </div>
 
@@ -92,8 +92,8 @@ function SincronizarPage() {
             <Cloud className="h-4 w-4 text-primary" /> Fonte
           </CardTitle>
           <CardDescription>
-            Planilha: <b>Mapa de Votos - Fortaleza - Zona 117 - 2022</b> · aba{" "}
-            <code>MUNIC-RES-RESEC-…FORTALEZA.CSV</code>
+            Planilha: <b>2022_Eleicoes_Mapa-de-Votos-Fortaleza-Maracanau</b> · aba{" "}
+            <code>Mapa</code>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 text-sm">
