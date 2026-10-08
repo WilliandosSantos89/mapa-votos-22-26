@@ -13,7 +13,7 @@ export type VotoRow = {
 };
 
 const COLS = "municipio,zona,secao,cargo,candidato,votos,aptos,local_votacao";
-const COLS_ANO = COLS + ",ano,bairro";
+const COLS_ANO = "municipio,zona,secao,cargo,candidato,votos,aptos,local_votacao,ano,bairro";
 
 export const getVotos = createServerFn({ method: "GET" }).handler(async () => {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
