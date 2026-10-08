@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Mail, ExternalLink, Trophy, Users, Target } from "lucide-react";
 import type { CandidatoPerfil } from "@/lib/candidato-perfil";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Row = {
   cargo: string;
@@ -26,6 +27,7 @@ type Row = {
 };
 
 export function CandidatoDetalhe({ perfil }: { perfil: CandidatoPerfil }) {
+  const isMobile = useIsMobile();
   const fetchVotos = useServerFn(getVotosCandidato);
   const q = useQuery({
     queryKey: ["votos_candidato", perfil.nome],
@@ -88,8 +90,8 @@ export function CandidatoDetalhe({ perfil }: { perfil: CandidatoPerfil }) {
                 />
               </div>
             </div>
-            <div className="flex-1 space-y-2 md:pt-6">
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="min-w-0 flex-1 space-y-2 md:pt-6">
+              <div className="grid min-w-0 gap-2 sm:flex sm:flex-wrap sm:items-center">
                 <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
                   {perfil.nomeExibicao}
                 </h1>
@@ -235,8 +237,8 @@ export function CandidatoDetalhe({ perfil }: { perfil: CandidatoPerfil }) {
                   <YAxis
                     type="category"
                     dataKey="local"
-                    width={130}
-                    tick={{ fontSize: 9 }}
+                    width={isMobile ? 100 : 130}
+                    tick={{ fontSize: 11 }}
                     interval={0}
                   />
                   <Tooltip

@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { ComparisonFilters } from "@/components/ComparisonFilters";
 
 export const Route = createFileRoute("/comparativo")({
   head: () => ({
@@ -37,10 +38,10 @@ function Diff({ v }: { v: number }) {
 
 function Filtro({ label, value, onChange, opcoes }: { label: string; value: string; onChange: (v: string) => void; opcoes: { v: string; l: string }[] }) {
   return (
-    <div className="space-y-1">
+    <div className="min-w-0 space-y-1">
       <div className="text-xs text-muted-foreground">{label}</div>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-full"><SelectValue /></SelectTrigger>
+        <SelectTrigger aria-label={label} className="w-full"><SelectValue /></SelectTrigger>
         <SelectContent>
           {opcoes.map((o) => <SelectItem key={o.v} value={o.v}>{o.l}</SelectItem>)}
         </SelectContent>
@@ -91,19 +92,18 @@ function Comparativo() {
         <p className="text-sm text-muted-foreground">Mesmas seções, dois anos. Os dados de 2026 cobrem {fmt(todas.filter((s) => s.em2026).length)} seções nos bairros enviados.</p>
       </div>
 
-      <Card>
-        <CardContent className="grid gap-3 pt-6 sm:grid-cols-2 lg:grid-cols-5">
-          <Filtro label="Candidato" value={cand} onChange={(v) => setCand(v as keyof typeof CANDS)} opcoes={[{ v: "ambos", l: "Aliados (David + Ronaldo)" }, { v: "david", l: "David Durand" }, { v: "ronaldo", l: "Ronaldo Martins" }]} />
+      <ComparisonFilters activeCount={[zona, bairro, local].filter(v => v !== TODOS).length + (escopo === "todas" ? 1 : 0)} primary={
+          <Filtro label="Candidato" value={cand} onChange={(v) => setCand(v as keyof typeof CANDS)} opcoes={[{ v: "ambos", l: "Aliança (ambos)" }, { v: "david", l: "David Durand" }, { v: "ronaldo", l: "Ronaldo Martins" }]} />
+      }>
           <Filtro label="Zona" value={zona} onChange={(v) => { setZona(v); setBairro(TODOS); setLocal(TODOS); }} opcoes={[{ v: TODOS, l: "Todas" }, ...zonas.map((z) => ({ v: z, l: `Zona ${z}${z === "117" ? " · Fortaleza" : z === "122" ? " · Maracanaú" : ""}` }))]} />
           <Filtro label="Bairro" value={bairro} onChange={(v) => { setBairro(v); setLocal(TODOS); }} opcoes={[{ v: TODOS, l: "Todos" }, ...bairros.map((b) => ({ v: b, l: b }))]} />
           <Filtro label="Local de votação" value={local} onChange={setLocal} opcoes={[{ v: TODOS, l: "Todos" }, ...locais.map((l) => ({ v: l, l }))]} />
           <Filtro label="Seções" value={escopo} onChange={(v) => setEscopo(v as "ambos" | "todas")} opcoes={[{ v: "ambos", l: "Presentes nos dois anos" }, { v: "todas", l: "Todas" }]} />
-        </CardContent>
-      </Card>
+      </ComparisonFilters>
 
       {isLoading ? <p className="text-muted-foreground">Carregando…</p> : (
         <>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             <Kpi titulo="Votos 2022" valor={fmt(tot22)} />
             <Kpi titulo="Votos 2026" valor={fmt(tot26)} />
             <Kpi titulo="Variação" valor={<><Diff v={tot26 - tot22} /> <span className="text-base text-muted-foreground">{pct(tot22 ? ((tot26 - tot22) / tot22) * 100 : null)}</span></>} />
@@ -112,7 +112,7 @@ function Comparativo() {
           <p className="text-xs text-muted-foreground">Seções só em 2022: {so2022} · só em 2026: {so2026}</p>
 
           <Tabs defaultValue="bairro">
-            <TabsList>
+            <TabsList className="grid h-auto w-full grid-cols-2 gap-1 sm:flex sm:w-fit [&>button]:min-h-11">
               <TabsTrigger value="bairro">Por bairro</TabsTrigger>
               <TabsTrigger value="local">Por local</TabsTrigger>
               <TabsTrigger value="secao">Ganhos e perdas</TabsTrigger>
@@ -156,7 +156,7 @@ function Kpi({ titulo, valor, sub }: { titulo: string; valor: React.ReactNode; s
   return (
     <Card>
       <CardHeader className="pb-2"><CardDescription>{titulo}</CardDescription></CardHeader>
-      <CardContent><div className="text-2xl font-semibold">{valor}</div>{sub && <p className="text-xs text-muted-foreground">{sub}</p>}</CardContent>
+      <CardContent><div className="flex flex-wrap items-baseline gap-1 text-xl sm:text-2xl font-semibold tabular-nums">{valor}</div>{sub && <p className="text-xs text-muted-foreground">{sub}</p>}</CardContent>
     </Card>
   );
 }
