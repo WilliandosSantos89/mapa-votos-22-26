@@ -1,4 +1,4 @@
-- [ ] Adaptar navegação e controles para toque.
-- [ ] Reorganizar filtros, indicadores, gráficos e comparações para celulares.
-- [ ] Verificar páginas em celulares e computadores.
-- [ ] Padronizar as fontes em todo o site, inclusive filtros.
+- [x] Adaptar navegação e controles para toque.
+- [x] Reorganizar filtros, indicadores, gráficos e comparações para celulares.
+- [x] Verificar páginas em celulares e computadores.
+- [x] Padronizar as fontes em todo o site, inclusive filtros.
