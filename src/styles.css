@@ -1,0 +1,289 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ronaldo: var(--ronaldo);
+  --color-david: var(--david);
+  --color-brand-green: var(--brand-green);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.25rem;
+
+  /* Light theme inspired by the Shopeers dashboard */
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.21 0.01 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.01 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.01 260);
+
+  /* Republicanos 10 — azul principal */
+  --primary: oklch(0.48 0.11 257);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.965 0 0);
+  --secondary-foreground: oklch(0.26 0.04 260);
+  --muted: oklch(0.968 0 0);
+  --muted-foreground: oklch(0.52 0.008 260);
+  --accent: oklch(0.955 0.006 258);
+  --accent-foreground: oklch(0.26 0.04 260);
+  --destructive: oklch(0.54 0.16 27);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.004 250);
+  --input: oklch(0.92 0.004 250);
+  --ring: oklch(0.48 0.11 257);
+
+  /* Cores da marca Republicanos 10 */
+  --ronaldo: oklch(0.48 0.11 257);          /* azul Republicanos */
+  --david: oklch(0.66 0.11 82);            /* amarelo/dourado */
+  --brand-green: oklch(0.52 0.09 155);     /* verde folhagem */
+
+  --chart-1: oklch(0.48 0.11 257);          /* azul */
+  --chart-2: oklch(0.66 0.11 82);          /* amarelo */
+  --chart-3: oklch(0.52 0.09 155);         /* verde */
+  --chart-4: oklch(0.58 0.1 45);           /* laranja suave */
+  --chart-5: oklch(0.5 0.08 300);          /* violeta suave */
+
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.28 0.008 260);
+  --sidebar-primary: oklch(0.48 0.11 257);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.965 0.004 255);
+  --sidebar-accent-foreground: oklch(0.48 0.11 257);
+  --sidebar-border: oklch(0.9 0.004 250);
+  --sidebar-ring: oklch(0.48 0.11 257);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+/* === Reference-inspired display + reveal utilities === */
+.font-display-xl {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-weight: 500;
+}
+
+@keyframes animationIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes staggerReveal {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.reveal-in {
+  animation: animationIn 0.18s linear both;
+}
+
+.animate-on-scroll {
+  opacity: 0;
+  animation: animationIn 0.18s linear both;
+  animation-play-state: paused;
+}
+.animate-on-scroll.is-visible {
+  animation-play-state: running;
+}
+
+.stagger-reveal > * {
+  opacity: 0;
+  animation: staggerReveal 0.18s linear both;
+}
+.stagger-reveal > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger-reveal > *:nth-child(2) { animation-delay: 0.04s; }
+.stagger-reveal > *:nth-child(3) { animation-delay: 0.06s; }
+.stagger-reveal > *:nth-child(4) { animation-delay: 0.08s; }
+.stagger-reveal > *:nth-child(5) { animation-delay: 0.1s; }
+.stagger-reveal > *:nth-child(6) { animation-delay: 0.12s; }
+.stagger-reveal > *:nth-child(7) { animation-delay: 0.14s; }
+.stagger-reveal > *:nth-child(8) { animation-delay: 0.16s; }
+
+/* Bordered container aesthetic from the reference */
+.section-x {
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.section-x-b {
+  border-bottom: 1px solid var(--border);
+}
+
+/* === Visual polish === */
+
+.hero-bg { position: relative; background: var(--background); }
+
+/* Brand tri-color divider */
+.brand-divider {
+  height: 2px;
+  background: linear-gradient(90deg,
+    var(--primary) 0%,
+    var(--primary) 40%,
+    var(--david) 40%,
+    var(--david) 70%,
+    var(--brand-green) 70%,
+    var(--brand-green) 100%);
+}
+
+/* KPI card polish */
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.15s linear;
+}
+.kpi-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kpi-accent, var(--primary));
+  opacity: 0.85;
+  transform: scaleX(0.35);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.kpi-card:hover {
+  border-color: color-mix(in oklch, var(--kpi-accent, var(--primary)) 35%, var(--border));
+}
+.kpi-card:hover::after {
+  transform: scaleX(1);
+}
+
+.kpi-icon {
+  display: inline-grid;
+  place-items: center;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 0.25rem;
+  background: color-mix(in oklch, var(--kpi-accent, var(--primary)) 14%, transparent);
+  color: var(--kpi-accent, var(--primary));
+}
+
+/* Section number label */
+.section-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.section-number strong {
+  color: var(--primary);
+  font-weight: 800;
+  margin-right: 0.4rem;
+}
+
+/* Sidebar active indicator */
+[data-slot="sidebar-menu-button"][data-active="true"] {
+  position: relative;
+  background: color-mix(in oklch, var(--primary) 8%, transparent) !important;
+}
+[data-slot="sidebar-menu-button"][data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--primary);
+}
+
+/* Custom scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--primary) 45%, transparent) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--primary) 40%, transparent);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklch, var(--primary) 65%, transparent);
+}
+
+/* Row hover for tables */
+.row-hover { transition: background-color 0.15s ease; }
+.row-hover:hover { background: color-mix(in oklch, var(--muted) 60%, transparent); }
+
+/* Inline percentage bar */
+.pct-bar {
+  position: relative;
+  height: 6px;
+  background: color-mix(in oklch, var(--muted) 80%, transparent);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.pct-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--pct-color, var(--primary));
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Chart entry animation refinement */
+.recharts-tooltip-wrapper { outline: none; }
+
+
