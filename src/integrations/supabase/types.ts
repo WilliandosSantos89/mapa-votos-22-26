@@ -82,7 +82,9 @@ export type Database = {
       }
       votos: {
         Row: {
+          ano: number
           aptos: number | null
+          bairro: string | null
           candidato: string
           cargo: string
           id: number
@@ -93,7 +95,9 @@ export type Database = {
           zona: string
         }
         Insert: {
+          ano?: number
           aptos?: number | null
+          bairro?: string | null
           candidato: string
           cargo: string
           id?: number
@@ -104,7 +108,9 @@ export type Database = {
           zona: string
         }
         Update: {
+          ano?: number
           aptos?: number | null
+          bairro?: string | null
           candidato?: string
           cargo?: string
           id?: number
