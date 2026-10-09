@@ -1,149 +1,97 @@
-# 🗳️ Mapa de Votos — Fortaleza & Maracanaú
+# 🗳️ Mapa de Votos — Fortaleza & Maracanaú (2022 × 2026)
 
-> **Dashboard de inteligência eleitoral para campanhas aliadas.**  
-> Análise demográfica, regional e por local de votação para estratégia de campanha dos candidatos **Ronaldo Martins** e **David Durand**.
-
----
-
-## 📌 Sobre este projeto
-
-Este aplicativo consome dados de uma planilha do **Google Sheets** e transforma informações brutas de votação em painéis visuais interativos:
-
-- 🗺️ **Filtros por região, município, zona, cargo e local de votação**
-- 📊 **Gráficos dinâmicos** de penetração, comparecimento e ranking de locais
-- 🎯 **Diagnóstico estratégico** identificando onde a aliança já é forte e onde precisa avançar
-- 📱 **Layout responsivo** para desktop e mobile
-
-A base técnica utiliza:
-- ⚛️ **React 19 + TanStack Start**
-- 🎨 **Tailwind CSS v4 + shadcn/ui**
-- ☁️ **Lovable Cloud** (backend + banco de dados)
-- 📈 **Recharts** para visualização de dados
+> **Plataforma de inteligência eleitoral** que transforma dados brutos de votação por seção em insights estratégicos para tomada de decisão de campanha.
 
 ---
 
-## 🔌 GitHub API Connector
+## 🎯 O problema que este projeto resolve
 
-Este projeto pode se integrar com a **API do GitHub** via o conector oficial do Lovable.
+Campanhas políticas geram montanhas de dados (boletins de urna, planilhas do TSE, levantamentos internos), mas raramente conseguem responder rápido às perguntas que realmente importam:
 
-### 🤔 Para que serve?
+- **Onde** a aliança cresceu ou perdeu votos entre duas eleições?
+- **Quais seções eleitorais** zeraram e precisam de recuperação urgente?
+- **Onde há eleitores aptos** com baixa conversão — ou seja, potencial a conquistar?
+- **Quais bairros** merecem reforço de presença e quais já estão consolidados?
 
-O connector `GitHub API` permite que o app leia e gerencie repositórios, issues, pull requests e outros recursos do GitHub diretamente pelo código do servidor.
-
-Exemplos de uso neste projeto:
-- 📁 Publicar relatórios de campanha em um repositório
-- 🐛 Criar issues automaticamente a partir de alertas estratégicos
-- 📑 Listar PRs e colaboradores para auditoria de código
-- 🔄 Sincronizar releases com marcos da campanha
-
-### 🔑 Como conectar
-
-1. No editor Lovable, abra o menu **Conectores**.
-2. Busque por **GitHub API** (`connector_id: github`).
-3. Clique em **Conectar** e escolha uma das opções:
-   - 🔵 **OAuth** (recomendado): login único com a conta GitHub.
-   - 🔑 **Personal Access Token**: crie um token em [github.com/settings/tokens](https://github.com/settings/tokens) com os escopos necessários (`repo`, `read:user`, etc.).
-4. Após conectar, o Lovable injeta as variáveis de ambiente no servidor:
-   - `LOVABLE_API_KEY`
-   - `GITHUB_API_KEY`
-
-> ⚠️ **Nunca exponha essas chaves no frontend.** Elas devem ser lidas apenas dentro de `createServerFn`.
+Este sistema responde tudo isso em segundos, comparando **seção por seção** as eleições de **2022 e 2026** para os candidatos aliados **David Durand** (Deputado Estadual) e **Ronaldo Martins** (Deputado Federal) em Fortaleza e Maracanaú (CE).
 
 ---
 
-## 🛠️ Exemplo de uso no código
+## ✨ Recursos principais
 
-```typescript
-import { createServerFn } from "@tanstack/react-start";
+### 📊 Visão geral comparativa (2022 × 2026)
+- Indicadores lado a lado: votos, eficiência (votos ÷ eleitores aptos), seções com voto e eleitores aptos — sempre com a variação entre os anos.
+- Filtros por **candidato, zona eleitoral, bairro e local de votação**, com escopo "seções presentes nos dois anos" ou "todas".
+- Gráficos por bairro, por local e por candidato.
 
-const GATEWAY_URL = "https://connector-gateway.lovable.dev/github";
+### 🧠 Insights automáticos
+O sistema gera leituras prontas para decisão:
+- Crescimento ou queda geral nas seções comparáveis;
+- **Bairro destaque** (maior ganho) e **bairro em queda** (maior perda);
+- **Seções que zeraram** em 2026 — prioridade de recuperação;
+- **Seções novas** que só existem em 2026;
+- **Seções prioritárias**: muitos eleitores aptos e baixa eficiência — o maior potencial de conversão.
 
-export const listarIssues = createServerFn({ method: "GET" })
-  .handler(async () => {
-    const lovableKey = process.env["LOVABLE_API_KEY"];
-    const githubKey = process.env["GITHUB_API_KEY"];
+### 👤 Perfil dos candidatos
+- Página individual por candidato com bio, eixos de atuação, contatos e desempenho eleitoral.
 
-    if (!lovableKey || !githubKey) {
-      throw new Error("GitHub API não está conectada.");
-    }
+### 🔄 Sincronização sob demanda
+- Importação dos dados de 2022 direto do **Google Sheets**, com sincronização incremental em lotes.
+- Atualização **somente manual** (botão "Atualizar dados") — os dados ficam estáticos e estáveis entre sessões.
 
-    const owner = "seudono";
-    const repo = "mapa-votos-fortaleza-maracanau";
+### 📱 Mobile first
+- Layout pensado primeiro para celular, onde a equipe de campanha mais acessa: navegação inferior, filtros em painel recolhível, tabelas com rolagem horizontal e gráficos legíveis em telas pequenas.
 
-    const response = await fetch(
-      `${GATEWAY_URL}/repos/${owner}/${repo}/issues?state=open&per_page=10`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/vnd.github+json",
-          Authorization: `Bearer ${lovableKey}`,
-          "X-Connection-Api-Key": githubKey,
-        },
-      }
-    );
+---
 
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(`GitHub API error [${response.status}]: ${errorBody}`);
-    }
+## 🧱 Stack técnica
 
-    return response.json();
-  });
+| Camada | Tecnologia |
+|---|---|
+| Frontend | **React 19 + TanStack Start** (SSR, rotas por arquivo, server functions) |
+| Estilo | **Tailwind CSS v4 + shadcn/ui** com tokens semânticos |
+| Gráficos | **Recharts** |
+| Backend / Banco | **Lovable Cloud** (PostgreSQL com Row Level Security) |
+| Integração | **Google Sheets API** via conector seguro do Lovable |
+| Qualidade | **Vitest** (testes da lógica de comparação) + TypeScript |
+
+### Decisões de arquitetura
+- **Comparação seção a seção**: os dois anos convivem na mesma tabela (`votos.ano`), permitindo cruzamento por chave `zona + seção` sem duplicar estruturas.
+- **Lógica pura e testada**: toda a matemática de comparação (`compararSecoes`, `agrupar`, `gerarInsights`, `prioritarias`) vive em módulos puros cobertos por testes — a UI apenas renderiza.
+- **Dados estáticos por padrão**: cache infinito no cliente; a atualização acontece só por ação explícita do usuário, evitando surpresas durante apresentações e análises.
+
+---
+
+## 📈 Relevância e impacto
+
+Ferramentas de análise eleitoral desse nível costumam ser restritas a grandes campanhas com equipes de dados. Este projeto entrega o mesmo tipo de inteligência — **diagnóstico territorial, detecção de perdas e priorização de esforço** — em uma interface acessível, que roda no celular de qualquer coordenador de campanha.
+
+Na prática, ele transforma uma planilha de milhares de linhas em uma **lista de prioridades acionável**: onde ir, o que recuperar e onde investir.
+
+---
+
+## 🚀 Executando localmente
+
+```bash
+bun install
+bun run dev
+# http://localhost:8080
 ```
 
 ---
 
-## 🚀 Endpoints úteis do GitHub
-
-| Recurso | Caminho (via gateway) |
-|---------|------------------------|
-| 📝 Listar issues | `/repos/{owner}/{repo}/issues` |
-| 🔀 Listar pull requests | `/repos/{owner}/{repo}/pulls` |
-| 👥 Listar colaboradores | `/repos/{owner}/{repo}/collaborators` |
-| 🏷️ Listar releases | `/repos/{owner}/{repo}/releases` |
-| 📂 Listar repositórios do usuário | `/user/repos` |
-
-> 💡 Sempre use caminhos **sem barra inicial** após a URL base do gateway.
-
----
-
-## 🧩 Estrutura do repositório
+## 🗂️ Estrutura
 
 ```text
 src/
-├── components/         # Componentes visuais reutilizáveis
-├── hooks/              # Hooks customizados (touch detection, contadores)
-├── integrations/       # Clientes Lovable Cloud
-├── lib/                # Funções de dados e server functions
-├── routes/             # Rotas TanStack (dashboard, perfis, sincronização)
-└── styles.css          # Tokens de design e tema visual
+├── components/      # UI reutilizável (navegação, filtros, perfil de candidato)
+├── lib/             # Lógica de dados e comparação (pura e testada)
+├── routes/          # Páginas: visão geral, análise 2022, candidatos, sincronização
+└── integrations/    # Clientes do backend (Lovable Cloud)
 ```
-
----
-
-## ⚙️ Configuração local
-
-1. Clone o repositório via GitHub sync.
-2. Instale as dependências:
-   ```bash
-   bun install
-   ```
-3. Inicie o servidor de desenvolvimento:
-   ```bash
-   bun run dev
-   ```
-4. Acesse `http://localhost:8080`.
-
----
-
-## 📞 Suporte
-
-- 📖 [Documentação do GitHub REST API](https://docs.github.com/en/rest)
-- 🧩 [Documentação dos Connectors Lovable](https://docs.lovable.dev/integrations)
-- 🐛 Para reportar bugs ou sugerir melhorias, use a aba de issues do repositório conectado.
 
 ---
 
 <p align="center">
-  🗳️ <strong>Mapa de Votos</strong> — dados que viram estratégia
+  🗳️ <strong>Mapa de Votos</strong> — dados que viram estratégia.
 </p>
